@@ -1,0 +1,28 @@
+[project]
+name = "tron-llm"
+version = "0.1.0"
+description = "A lightweight Python LLM workspace with a torch-based runtime."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "torch",
+]
+
+[project.scripts]
+tron-llm = "tron_llm.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# Define the external PyTorch repository for CUDA 12.6 wheels
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true # Prevents uv from looking here for standard packages (e.g., numpy)
+
+# Map specific packages to the PyTorch CUDA index for Windows and Linux
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cu126", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
